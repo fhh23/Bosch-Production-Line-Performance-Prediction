@@ -4,8 +4,9 @@ import gc
 import matplotlib.pyplot as plt
 from Common import *
 
-def FindUniqueCols():
-    df = pd.read_csv("train/train_categorical.csv",nrows=1)
+def FindUniqueCols(filename, writeFilename):
+    path = 'train/' + filename
+    df = pd.read_csv(path, nrows=1)
     cols=df.columns
     colLen=len(cols)
     #number of slices that you want to cut the columnset into so that each slice can fit into memory
@@ -20,7 +21,7 @@ def FindUniqueCols():
         left = i*(col_slice)
         right = (i+1)*(col_slice)+1
         print (i,left,right)
-        df = pd.read_csv('train/train_categorical.csv', dtype = str,skipinitialspace=True, usecols=cols[left:right])
+        df = pd.read_csv(path, dtype = str, skipinitialspace=True, usecols=cols[left:right])
         for c in cols[left:right]:
             hash_val=hash(tuple(df[c]))
             if hash_val in col_hash:
@@ -32,11 +33,11 @@ def FindUniqueCols():
     uniqCat = None
     # print all unique columns
     for key in col_hash:
-        if uniqCat == None:
+        if (uniqCat == None):
             uniqCat = col_hash[key][0]
         else:
-            uniqCat = np.concatenate(uniqCat, col_hash[key][0])
-    WriteFile('UniqueCatCols.pk', uniqCat)
+            uniqCat = np.append(uniqCat, col_hash[key][0])
+    WriteFile(writeFilename, uniqCat)
 
 def AnalyzeDateData():
     trainDateData = OpenFile('Date_Data.pk') 

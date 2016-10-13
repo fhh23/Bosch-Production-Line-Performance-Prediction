@@ -63,20 +63,21 @@ def trainModel(trainData):
     
 if __name__ == "__main__":
     print('Started')
-    
-    file = 'TD_StartTime.pk'
-    if (file == 'TD_StartTime.pk'):
-        trainData = OpenFile(file)
-        trainData = trainData.sort_values(by=['Start_Time', 'Id'], ascending=True)
-        trainData['3'] = trainData['Id'].diff().fillna(9999999).astype(int)
-        trainData['4'] = trainData['Id'].iloc[::-1].diff().fillna(9999999).astype(int)
-        trainData.pop('Id')
-        
-    else:
-        trainData = OpenFile('TD_FeatureCnt.pk')
-        
-    print(trainData.shape)
-    xgb = trainModel(trainData)
+    FindUniqueCols('train_categorical.csv', 'UniqueCatCols.pk')
+    cols = OpenFile('UniqueCatCols.pk')
+#    file = 'TD_StartTime.pk'
+#    if (file == 'TD_StartTime.pk'):
+#        trainData = OpenFile(file)
+#        trainData = trainData.sort_values(by=['Start_Time', 'Id'], ascending=True)
+#        trainData['3'] = trainData['Id'].diff().fillna(9999999).astype(int)
+#        trainData['4'] = trainData['Id'].iloc[::-1].diff().fillna(9999999).astype(int)
+#        trainData.pop('Id')
+#        
+#    else if (file == 'TD_FeatureCnt.pk'):
+#        trainData = OpenFile('TD_FeatureCnt.pk')
+#        
+#    print(trainData.shape)
+#    xgb = trainModel(trainData)
     
  
     print('Finished')
